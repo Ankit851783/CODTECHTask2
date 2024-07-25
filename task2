@@ -1,0 +1,50 @@
+#include <Servo.h>
+
+// Define pin numbers
+const int pirPin = 2;    // PIR sensor output pin
+const int servoPin = 9;  // Servo motor control pin
+const int ledPin = 13;   // LED pin
+
+Servo myServo; // Create a servo object
+
+void setup() {
+  // Initialize the PIR sensor pin as an input
+  pinMode(pirPin, INPUT);
+  
+  // Initialize the LED pin as an output
+  pinMode(ledPin, OUTPUT);
+
+  // Attach the servo object to the servo pin
+  myServo.attach(servoPin);
+
+  // Initialize the servo position to 0 degrees
+  myServo.write(0);
+
+  // Begin serial communication for debugging purposes
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read the PIR sensor value
+  int pirValue = digitalRead(pirPin);
+
+  // Check if motion is detected
+if (pirValue == HIGH) {
+    // Turn on the LED
+    digitalWrite(ledPin, HIGH);
+    
+    // If motion is detected, rotate the servo to 90 degrees
+    myServo.write(90);
+    Serial.println("Motion detected! Servo rotated to 90 degrees and LED is ON.");
+  } else {
+    // Turn off the LED
+    digitalWrite(ledPin, LOW);
+    
+    // If no motion is detected, rotate the servo back to 0 degrees
+    myServo.write(0);
+    Serial.println("No motion detected. Servo at 0 degrees and LED is OFF.");
+  }
+
+  // Add a small delay to avoid multiple triggers
+  delay(200);
+}
